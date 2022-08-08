@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable radix */
 const express = require('express');
 // const { add } = require('./lib/numbers');
@@ -56,12 +57,12 @@ const {
   elementsStartingWithAVowel,
   removeSpaces,
   sumNumbers,
-  sortByLastLetter
+  sortByLastLetter,
 } = require('./lib/arrays');
 
 const app = express();
 
-//**JSON parsing middleware, so req.body gets converted into JS object (so don't need to convert data types)
+//* *JSON parsing middleware, so req.body gets converted into JS object (so don't need to convert data types)
 app.use(express.json());
 
 app.get('/strings/hello/:word', (req, res) => {
@@ -113,43 +114,49 @@ app.get('/numbers/subtract/:num1/from/:num2', (req, res) => {
 
 app.post('/numbers/multiply', (req, res) => {
   const { a, b } = req.body;
+  let error;
   if (!Number.isNaN(+a) && !Number.isNaN(+b)) {
     res.status(200).json({ result: multiply(a, b) });
   } else if (!a || !b) {
-    res.status(400).json({ error: 'Parameters "a" and "b" are required.' });
+    error = 'Parameters "a" and "b" are required.';
   } else {
-    res.status(400).json({ error: 'Parameters "a" and "b" must be valid numbers.' });
+    error = 'Parameters "a" and "b" must be valid numbers.';
   }
+  res.status(400).json({ error });
 });
 
 app.post('/numbers/divide', (req, res) => {
   const { a, b } = req.body;
+  let error;
   if (!Number.isNaN(+a) && !Number.isNaN(+b)) {
     if (b !== 0) {
       res.status(200).json({ result: divide(a, b) });
     } else {
-      res.status(400).json({ error: 'Unable to divide by 0.' });
+      error = 'Unable to divide by 0.';
     }
   } else if (!a || !b) {
-    res.status(400).json({ error: 'Parameters "a" and "b" are required.' });
+    error = 'Parameters "a" and "b" are required.';
   } else {
-    res.status(400).json({ error: 'Parameters "a" and "b" must be valid numbers.' });
+    error = 'Parameters "a" and "b" must be valid numbers.';
   }
+  res.status(400).json({ error });
 });
 
 app.post('/numbers/remainder', (req, res) => {
   const { a, b } = req.body;
+  let error;
   if (!Number.isNaN(+a) && !Number.isNaN(+b)) {
     if (b !== 0) {
       res.status(200).json({ result: remainder(a, b) });
     } else {
-      res.status(400).json({ error: 'Unable to divide by 0.' });
+      error = 'Unable to divide by 0.';
     }
   } else if (!a || !b) {
-    res.status(400).json({ error: 'Parameters "a" and "b" are required.' });
+    error = 'Parameters "a" and "b" are required.';
   } else {
-    res.status(400).json({ error: 'Parameters must be valid numbers.' });
+    error = 'Parameters must be valid numbers.';
   }
+  res.status(400).json({ error });
 });
 
 app.post('/booleans/negate', (req, res) => {
@@ -204,11 +211,13 @@ app.post('/arrays/starts-with-vowel', (req, res) => {
 app.post('/arrays/remove-element', (req, res) => {
   const { array } = req.body;
   const { index } = req.query;
+  let result;
   if (index) {
-    res.status(200).json({ result: removeNthElement2(+index, array) });
+    result = removeNthElement2(+index, array);
   } else {
-    res.status(200).json({ result: removeNthElement2(0, array) });
+    result = removeNthElement2(0, array);
   }
+  res.status(200).json({ result });
 });
 
 module.exports = app;
