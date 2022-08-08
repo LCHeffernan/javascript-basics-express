@@ -23,6 +23,24 @@ const {
   remainder,
 } = require('./lib/numbers');
 
+const {
+  negate,
+  both,
+  either,
+  none,
+  one,
+  truthiness,
+  isEqual,
+  isGreaterThan,
+  isLessThanOrEqualTo,
+  isOdd,
+  isEven,
+  isSquare,
+  startsWith,
+  containsVowels,
+  isLowerCase,
+} = require('./lib/booleans');
+
 const app = express();
 
 //**JSON parsing middleware, so req.body gets converted into JS object (so don't need to convert data types)
@@ -113,6 +131,35 @@ app.post('/numbers/remainder', (req, res) => {
     res.status(400).json({ error: 'Parameters "a" and "b" are required.' });
   } else {
     res.status(400).json({ error: 'Parameters must be valid numbers.' });
+  }
+});
+
+app.post('/booleans/negate', (req, res) => {
+  const { value } = req.body;
+  res.status(200).json({ result: negate(value) });
+});
+
+app.post('/booleans/truthiness', (req, res) => {
+  const { value } = req.body;
+  res.status(200).json({ result: truthiness(value) });
+});
+
+app.get('/booleans/is-odd/:number', (req, res) => {
+  const a = req.params.number;
+  if (!Number.isNaN(a)) {
+    res.status(200).json({ result: isOdd(a) });
+  } else {
+    res.status(400).json({ error: 'Parameter must be a number.' });
+  }
+});
+
+app.get('/booleans/:string/starts-with/:character', (req, res) => {
+  const str = req.params.string;
+  const char = req.params.character;
+  if (char.length === 1) {
+    res.status(200).json({ result: startsWith(char, str) });
+  } else {
+    res.status(400).json({ error: 'Parameter "character" must be a single character.' });
   }
 });
 
