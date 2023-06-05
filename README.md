@@ -1,4 +1,4 @@
-# JavaScript Basics in Express
+# JavaScript Basics in Express.
 
 ## Getting started
 
